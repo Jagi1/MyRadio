@@ -1,0 +1,21 @@
+ext {
+    navDependencies = [
+            fragmentKtx: "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            uiKtx      : "androidx.navigation:navigation-ui-ktx:$nav_version",
+            compose    : "androidx.navigation:navigation-compose:$nav_version"
+    ]
+    composeDependencies = [
+            material3     : "androidx.compose.material3:material3",
+            toolingPreview: "androidx.compose.ui:ui-tooling-preview",
+            activities    : "androidx.activity:activity-compose:$compose_activities",
+            viewModels    : "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_viewmodels",
+            liveDatas     : "androidx.compose.runtime:runtime-livedata",
+            rxjava        : "androidx.compose.runtime:runtime-rxjava2"
+    ]
+    composeDebugDependencies = [
+            "tooling": "androidx.compose.ui:ui-tooling"
+    ]
+    composeTestDependencies = [
+            "testJunit4": "androidx.compose.ui:ui-test-junit4"
+    ]
+}

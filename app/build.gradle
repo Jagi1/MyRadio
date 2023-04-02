@@ -49,6 +49,7 @@ dependencies {
 
     implementation navDependencies.values()
     implementation composeDependencies.values()
+    implementation koinDependencies.values()
     debugImplementation composeDebugDependencies.values()
     androidTestImplementation composeTestDependencies.values()
 

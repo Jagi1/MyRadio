@@ -4,4 +4,5 @@ ext {
     compose_material = "1.4.0"
     compose_activities = "1.6.1"
     compose_viewmodels = "2.5.1"
+    exoplayer_version = "1.0.0"
 }

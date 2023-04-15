@@ -21,7 +21,7 @@ class DashboardViewModel : ViewModel()
   private fun getStations() {
     // TODO: Create room database
     _stations.value = listOf(
-      Station("Station 1", "url 1"),
+      Station("Station 1", "http://airspectrum.cdnstream1.com:8114/1648_128"),
       Station("Station 2", "url 2"),
       Station("Station 3", "url 3")
     )

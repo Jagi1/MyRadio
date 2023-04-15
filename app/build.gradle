@@ -50,6 +50,7 @@ dependencies {
     implementation navDependencies.values()
     implementation composeDependencies.values()
     implementation koinDependencies.values()
+    implementation exoplayerDependencies.values()
     debugImplementation composeDebugDependencies.values()
     androidTestImplementation composeTestDependencies.values()
 

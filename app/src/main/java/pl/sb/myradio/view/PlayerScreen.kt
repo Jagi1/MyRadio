@@ -1,35 +1,74 @@
 package pl.sb.myradio.view
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.painterResource
+import pl.sb.myradio.R
 import pl.sb.myradio.viewModel.DashboardViewModel
 
 @Composable
-fun PlayerScreen()
+fun PlayerScreen(
+  viewModel: DashboardViewModel
+)
 {
-  val viewModel = viewModel<DashboardViewModel>(LocalContext.current as AppCompatActivity)
-
   Box(
     modifier = Modifier
       .fillMaxSize()
-      .background(Color.Magenta),
+      .background(Color.White),
     contentAlignment = Alignment.Center
   ) {
-    Button(
-      onClick = {
-        viewModel.getStations()
-      }
-    ) {
+    Station(viewModel)
+    StationControls(viewModel)
+  }
+}
 
+@Composable
+private fun BoxScope.Station(
+  viewModel: DashboardViewModel
+)
+{
+  val chosenStation by viewModel.chosenStation.collectAsState()
+
+  Column {
+    chosenStation?.let { station ->
+      Text(text = station.name)
+      Text(text = station.url)
     }
+  }
+}
+
+@Composable
+private fun BoxScope.StationControls(
+  viewModel: DashboardViewModel
+)
+{
+  Row(modifier = Modifier.align(alignment = Alignment.BottomCenter)) {
+    Image(
+      painter = painterResource(id = R.drawable.play_arrow),
+      contentDescription = "Play button",
+      modifier = Modifier
+        .clickable { viewModel.resolveUiEvent(DashboardViewModel.UiEvents.PlayButtonClicked) }
+    )
+    Image(
+      painter = painterResource(id = R.drawable.pause),
+      contentDescription = "Pause button",
+      modifier = Modifier
+        .clickable { viewModel.resolveUiEvent(DashboardViewModel.UiEvents.PauseButtonClicked) }
+    )
+    Image(
+      painter = painterResource(id = R.drawable.stop),
+      contentDescription = "Stop button",
+      modifier = Modifier
+        .clickable { viewModel.resolveUiEvent(DashboardViewModel.UiEvents.StopButtonClicked) }
+    )
   }
 }

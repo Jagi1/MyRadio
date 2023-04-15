@@ -19,7 +19,7 @@ class DashboardActivity : AppCompatActivity()
     setContentView(
       ComposeView(this).apply {
         setContent {
-          DashboardScreen(viewModel.stations)
+          DashboardScreen(viewModel)
         }
       }
     )

@@ -16,12 +16,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.flow.StateFlow
+import pl.sb.myradio.viewModel.DashboardViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DashboardScreen(
-  stations: StateFlow<List<String>>
+  viewModel: DashboardViewModel
 )
 {
   val navController = rememberNavController()
@@ -38,8 +38,8 @@ fun DashboardScreen(
     },
     bottomBar = { BottomBar(navController = navController) },
 
-  ) {
-    BottomNavGraph(navController = navController, stations)
+  ) { innerPadding ->
+    BottomNavGraph(navController = navController, viewModel, innerPadding)
   }
 }
 

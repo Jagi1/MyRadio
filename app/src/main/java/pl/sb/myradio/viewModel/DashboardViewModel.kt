@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import pl.sb.myradio.base.Consumable
 import pl.sb.myradio.model.Station
 
 class DashboardViewModel : ViewModel()
@@ -12,6 +13,8 @@ class DashboardViewModel : ViewModel()
   val stations = _stations.asStateFlow()
   private val _chosenStation = MutableStateFlow<Station?>(null)
   val chosenStation = _chosenStation.asStateFlow()
+  private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Initial(true))
+  val playerState = _playerState.asStateFlow()
 
   init
   {
@@ -31,11 +34,37 @@ class DashboardViewModel : ViewModel()
     when (event) {
       is UiEvents.StationClicked ->
       {
-        _chosenStation.update { event.station }
+        _chosenStation.update { event.station.copy(isConsumed = false) }
       }
-      is UiEvents.PauseButtonClicked -> TODO()
-      is UiEvents.PlayButtonClicked -> TODO()
-      is UiEvents.StopButtonClicked -> TODO()
+      is UiEvents.PauseButtonClicked ->
+      {
+        _playerState.update { PlayerState.Paused(false) }
+      }
+      is UiEvents.PlayButtonClicked ->
+      {
+        _playerState.update { PlayerState.Playing(false) }
+      }
+      is UiEvents.StopButtonClicked ->
+      {
+        _playerState.update { PlayerState.Stopped(false) }
+      }
+    }
+  }
+
+  fun consumeChosenStation()
+  {
+    _chosenStation.update { it?.copy(isConsumed = true) }
+  }
+
+  fun consumePlayerState()
+  {
+    _playerState.update {
+      when (it) {
+        is PlayerState.Initial -> it.copy(true)
+        is PlayerState.Paused  -> it.copy(true)
+        is PlayerState.Playing -> it.copy(true)
+        is PlayerState.Stopped -> it.copy(true)
+      }
     }
   }
 
@@ -45,5 +74,12 @@ class DashboardViewModel : ViewModel()
     object PlayButtonClicked : UiEvents
     object PauseButtonClicked : UiEvents
     object StopButtonClicked : UiEvents
+  }
+
+  sealed class PlayerState : Consumable {
+    data class Playing(override val isConsumed: Boolean = false) : PlayerState()
+    data class Paused(override val isConsumed: Boolean = false) : PlayerState()
+    data class Stopped(override val isConsumed: Boolean = false) : PlayerState()
+    data class Initial(override val isConsumed: Boolean = false) : PlayerState()
   }
 }

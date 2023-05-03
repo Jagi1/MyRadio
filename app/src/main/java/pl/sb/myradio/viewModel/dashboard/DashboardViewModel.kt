@@ -1,4 +1,4 @@
-package pl.sb.myradio.viewModel
+package pl.sb.myradio.viewModel.dashboard
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +15,8 @@ class DashboardViewModel : ViewModel()
   val chosenStation = _chosenStation.asStateFlow()
   private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Initial(true))
   val playerState = _playerState.asStateFlow()
+  private val _newStationVisibilityState = MutableStateFlow(false)
+  val newStationVisibilityState = _newStationVisibilityState.asStateFlow()
 
   init
   {
@@ -32,7 +34,7 @@ class DashboardViewModel : ViewModel()
 
   fun resolveUiEvent(event: UiEvents) {
     when (event) {
-      is UiEvents.StationClicked ->
+      is UiEvents.StationClicked     ->
       {
         _chosenStation.update { event.station.copy(isConsumed = false) }
       }
@@ -40,13 +42,20 @@ class DashboardViewModel : ViewModel()
       {
         _playerState.update { PlayerState.Paused(false) }
       }
-      is UiEvents.PlayButtonClicked ->
+      is UiEvents.PlayButtonClicked  ->
       {
         _playerState.update { PlayerState.Playing(false) }
       }
-      is UiEvents.StopButtonClicked ->
+      is UiEvents.StopButtonClicked  ->
       {
         _playerState.update { PlayerState.Stopped(false) }
+      }
+      is UiEvents.AddNewStationClicked  ->
+      {
+        _newStationVisibilityState.update { true }
+      }
+      is UiEvents.AddNewStationBackPressed -> {
+        _newStationVisibilityState.update { false }
       }
     }
   }
@@ -74,6 +83,8 @@ class DashboardViewModel : ViewModel()
     object PlayButtonClicked : UiEvents
     object PauseButtonClicked : UiEvents
     object StopButtonClicked : UiEvents
+    object AddNewStationClicked : UiEvents
+    object AddNewStationBackPressed : UiEvents
   }
 
   sealed class PlayerState : Consumable {

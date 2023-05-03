@@ -1,4 +1,4 @@
-package pl.sb.myradio.view
+package pl.sb.myradio.view.dashboard
 
 import android.content.ComponentName
 import android.content.Context
@@ -6,20 +6,20 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.fragment.NavHostFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.sb.myradio.R
 import pl.sb.myradio.service.RadioService
-import pl.sb.myradio.viewModel.DashboardViewModel
+import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 class DashboardActivity : AppCompatActivity()
 {
-  private val viewModel: DashboardViewModel by viewModels()
+  private val viewModel: DashboardViewModel by viewModel()
   private var mRadioService: RadioService? = null
   private var mRadioServiceBound: Boolean = false
   private val connection = object: ServiceConnection {

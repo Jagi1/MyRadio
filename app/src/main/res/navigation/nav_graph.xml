@@ -6,6 +6,6 @@
 
     <activity
         android:id="@+id/dashboardActivity"
-        android:name="pl.sb.myradio.view.DashboardActivity"
+        android:name="pl.sb.myradio.view.dashboard.DashboardActivity"
         android:label="DashboardActivity" />
 </navigation>

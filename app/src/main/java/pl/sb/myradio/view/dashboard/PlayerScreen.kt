@@ -1,4 +1,4 @@
-package pl.sb.myradio.view
+package pl.sb.myradio.view.dashboard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import pl.sb.myradio.R
-import pl.sb.myradio.viewModel.DashboardViewModel
+import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 @Composable
 fun PlayerScreen(

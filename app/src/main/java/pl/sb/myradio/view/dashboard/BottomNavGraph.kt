@@ -1,15 +1,17 @@
-package pl.sb.myradio.view
+package pl.sb.myradio.view.dashboard
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import kotlinx.coroutines.flow.StateFlow
-import pl.sb.myradio.model.Station
-import pl.sb.myradio.viewModel.DashboardViewModel
+import pl.sb.myradio.view.dashboard.BottomBarScreen
+import pl.sb.myradio.view.dashboard.PlayerScreen
+import pl.sb.myradio.view.dashboard.StationsScreen
+import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 @Composable
 fun BottomNavGraph(

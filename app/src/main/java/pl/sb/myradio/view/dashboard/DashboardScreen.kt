@@ -1,4 +1,4 @@
-package pl.sb.myradio.view
+package pl.sb.myradio.view.dashboard
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -16,7 +16,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import pl.sb.myradio.viewModel.DashboardViewModel
+import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -26,18 +26,7 @@ fun DashboardScreen(
 {
   val navController = rememberNavController()
   Scaffold(
-    topBar = {
-      Box(
-        modifier = Modifier
-          .fillMaxWidth()
-          .background(MaterialTheme.colors.primary),
-        
-      ) {
-        Text(text = stringResource(id = pl.sb.myradio.R.string.app_name))
-      }
-    },
-    bottomBar = { BottomBar(navController = navController) },
-
+    bottomBar = { BottomBar(navController = navController) }
   ) { innerPadding ->
     BottomNavGraph(navController = navController, viewModel, innerPadding)
   }

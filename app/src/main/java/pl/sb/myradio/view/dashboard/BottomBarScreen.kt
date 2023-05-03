@@ -1,4 +1,4 @@
-package pl.sb.myradio.view
+package pl.sb.myradio.view.dashboard
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

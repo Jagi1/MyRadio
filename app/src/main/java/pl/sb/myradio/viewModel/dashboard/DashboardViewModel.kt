@@ -1,13 +1,25 @@
 package pl.sb.myradio.viewModel.dashboard
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import pl.sb.myradio.base.Consumable
 import pl.sb.myradio.model.Station
+import pl.sb.myradio.util.getJsonDataFromAsset
+import java.io.FileReader
 
-class DashboardViewModel : ViewModel()
+class DashboardViewModel(
+  application: Application,
+  private val gson: Gson
+) : AndroidViewModel(application)
 {
   private val _stations = MutableStateFlow(listOf<Station>())
   val stations = _stations.asStateFlow()
@@ -25,11 +37,13 @@ class DashboardViewModel : ViewModel()
 
   private fun getStations() {
     // TODO: Create room database
-    _stations.value = listOf(
-      Station("Station 1", "http://airspectrum.cdnstream1.com:8114/1648_128"),
-      Station("Station 2", "url 2"),
-      Station("Station 3", "url 3")
-    )
+    viewModelScope.launch {
+      _stations.update {
+        val jsonFileString = getJsonDataFromAsset(getApplication(), "stations.json")
+        val listStationType = object: TypeToken<List<Station>>() {}.type
+        gson.fromJson(jsonFileString, listStationType)
+      }
+    }
   }
 
   fun resolveUiEvent(event: UiEvents) {

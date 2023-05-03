@@ -27,4 +27,7 @@ ext {
             dash: "androidx.media3:media3-exoplayer-dash:$exoplayer_version",
             ui: "androidx.media3:media3-ui:$exoplayer_version"
     ]
+    gsonDependencies = [
+            gson: "com.google.code.gson:gson:$gson_version"
+    ]
 }

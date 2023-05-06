@@ -5,9 +5,9 @@ import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
 // for blur purpose
-val Glass1 = Color(0x22FFFFFF)
-val Glass2 = Color(0x0EFFFFFF)
-val Glass3 = Color(0xAFFFFFFF)
+val Grey1 = Color(0x22FFFFFF)
+val Grey2 = Color(0x0EFFFFFF)
+val Grey3 = Color(0xAFFFFFFF)
 
 val Purple200 = Color(0xFFCE93D8)
 val Purple500 = Color(0xFF9C27B0)

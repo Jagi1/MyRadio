@@ -15,15 +15,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import pl.sb.myradio.view.theme.Glass1
-import pl.sb.myradio.view.theme.Glass2
-import pl.sb.myradio.view.theme.Glass3
+import pl.sb.myradio.view.theme.Grey1
+import pl.sb.myradio.view.theme.Grey2
+import pl.sb.myradio.view.theme.Grey3
 
 @Composable
 fun BlurryCard(
   modifier: Modifier = Modifier,
   shape: Shape = RoundedCornerShape(16.dp),
-  content: @Composable (BoxScope) -> Unit
+  content: @Composable (BoxScope) -> Unit = { }
 )
 {
   Card(
@@ -42,7 +42,7 @@ fun BlurryCard(
         )
         .background(
           Brush.radialGradient(
-            colors = listOf(Glass1, Glass2, Glass3),
+            colors = listOf(Grey1, Grey2, Grey3),
             radius = 2200f,
             center = Offset.Infinite
           )

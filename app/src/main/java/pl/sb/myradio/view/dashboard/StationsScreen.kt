@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import pl.sb.myradio.model.Station
 import pl.sb.myradio.R
+import pl.sb.myradio.view.base.WindowTitle
 import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 @Composable
@@ -104,18 +105,6 @@ fun BoxScope.StationsScreen(
       }
     )
   }
-}
-
-@Composable
-fun BoxScope.WindowTitle(text: String) {
-  Text(
-    text = text,
-    modifier = Modifier.align(Alignment.TopStart),
-    style = TextStyle(
-      fontSize = 24.sp,
-      fontWeight = FontWeight.Bold
-    )
-  )
 }
 
 @Composable

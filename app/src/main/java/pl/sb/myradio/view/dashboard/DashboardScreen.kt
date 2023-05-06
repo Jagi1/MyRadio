@@ -5,9 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -20,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pl.sb.myradio.R
+import pl.sb.myradio.view.base.BlurryCard
 import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -65,7 +68,9 @@ fun BottomBar(navController: NavHostController)
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   val currentDestination = navBackStackEntry?.destination
 
-  Box {
+  Box(
+    modifier = Modifier.padding(24.dp)
+  ) {
     Surface(
       color = Color.Transparent,
       contentColor = contentColorFor(Color.Transparent),
@@ -95,21 +100,36 @@ fun RowScope.ScreenOption(
   navController: NavHostController
 )
 {
-  BottomNavigationItem(
-    label = {
-      Text(text = screen.title)
-    },
-    icon = {
-      Icon(imageVector = screen.icon, contentDescription = "Navigation icon")
-    },
-    selected = currentDestination?.hierarchy?.any { destination -> destination.route == screen.route } == true,
-    onClick = {
-      navController.navigate(screen.route) {
-        popUpTo(navController.graph.findStartDestination().id)
-        launchSingleTop = true
+  val cardShape = when (screen) {
+    BottomBarScreen.Player   -> RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)
+    BottomBarScreen.Stations -> RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
+  }
+  BlurryCard(
+    modifier = Modifier
+      .weight(1f),
+    shape = cardShape
+  ) {
+    BottomNavigationItem(
+      label = {
+        Text(text = screen.title)
+      },
+      icon = {
+        Icon(imageVector = screen.icon, contentDescription = "Navigation icon")
+      },
+      selected = currentDestination?.hierarchy?.any { destination -> destination.route == screen.route } == true,
+      onClick = {
+        navController.navigate(screen.route) {
+          popUpTo(navController.graph.findStartDestination().id)
+          launchSingleTop = true
+        }
+      },
+      unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+      modifier = with(it) {
+        Modifier
+          .background(Color.Transparent)
+          .align(Alignment.Center)
+          .fillMaxSize()
       }
-    },
-    unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-    modifier = Modifier.background(Color.Transparent)
-  )
+    )
+  }
 }

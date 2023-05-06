@@ -4,9 +4,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.hardware.lights.Light
 import android.os.Bundle
 import android.os.IBinder
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +20,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.sb.myradio.service.RadioService
+import pl.sb.myradio.view.theme.DarkColorPalette
+import pl.sb.myradio.view.theme.LightColorPalette
+import pl.sb.myradio.view.theme.Shapes
+import pl.sb.myradio.view.theme.Typography
 import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
 class DashboardActivity : AppCompatActivity()
@@ -42,65 +50,68 @@ class DashboardActivity : AppCompatActivity()
   {
     super.onCreate(savedInstanceState)
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    setContentView(
-      ComposeView(this).apply {
-        setContent {
-          val chosenStation by viewModel.chosenStation.collectAsState()
-          val playerState by viewModel.playerState.collectAsState()
 
-          LaunchedEffect(chosenStation) {
-            if (chosenStation?.isConsumed?.not() == true) {
-              chosenStation?.let { station ->
+    setContent {
+      MaterialTheme(
+        colors = if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+        typography = Typography,
+        shapes = Shapes,
+      ) {
+        val chosenStation by viewModel.chosenStation.collectAsState()
+        val playerState by viewModel.playerState.collectAsState()
+
+        LaunchedEffect(chosenStation) {
+          if (chosenStation?.isConsumed?.not() == true) {
+            chosenStation?.let { station ->
+              mRadioService?.let { service ->
+                if (mRadioServiceBound) {
+                  service.initializePlayer(station.url)
+                }
+              }
+            }
+            viewModel.consumeChosenStation()
+          }
+        }
+
+        LaunchedEffect(playerState) {
+          if (playerState.isConsumed.not()) {
+            when (playerState) {
+              is DashboardViewModel.PlayerState.Playing ->
+              {
                 mRadioService?.let { service ->
                   if (mRadioServiceBound) {
-                    service.initializePlayer(station.url)
+                    service.startPlayer()
                   }
                 }
               }
-              viewModel.consumeChosenStation()
-            }
-          }
-
-          LaunchedEffect(playerState) {
-            if (playerState.isConsumed.not()) {
-              when (playerState) {
-                is DashboardViewModel.PlayerState.Playing ->
-                {
-                  mRadioService?.let { service ->
-                    if (mRadioServiceBound) {
-                      service.startPlayer()
-                    }
+              is DashboardViewModel.PlayerState.Paused  ->
+              {
+                mRadioService?.let { service ->
+                  if (mRadioServiceBound) {
+                    service.pausePlayer()
                   }
-                }
-                is DashboardViewModel.PlayerState.Paused  ->
-                {
-                  mRadioService?.let { service ->
-                    if (mRadioServiceBound) {
-                      service.pausePlayer()
-                    }
-                  }
-                }
-                is DashboardViewModel.PlayerState.Stopped ->
-                {
-                  mRadioService?.let { service ->
-                    if (mRadioServiceBound) {
-                      service.stopPlayer()
-                    }
-                  }
-                }
-                is DashboardViewModel.PlayerState.Initial ->
-                {
-                  // do nothing
                 }
               }
-              viewModel.consumePlayerState()
+              is DashboardViewModel.PlayerState.Stopped ->
+              {
+                mRadioService?.let { service ->
+                  if (mRadioServiceBound) {
+                    service.stopPlayer()
+                  }
+                }
+              }
+              is DashboardViewModel.PlayerState.Initial ->
+              {
+                // do nothing
+              }
             }
+            viewModel.consumePlayerState()
           }
-
-          DashboardScreen(viewModel)
         }
+
+        DashboardScreen(viewModel)
       }
-    )
+    }
   }
 
   override fun onStart()

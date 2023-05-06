@@ -11,9 +11,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.navigation.fragment.NavHostFragment
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.sb.myradio.R
 import pl.sb.myradio.service.RadioService
 import pl.sb.myradio.viewModel.dashboard.DashboardViewModel
 
@@ -40,6 +41,7 @@ class DashboardActivity : AppCompatActivity()
   override fun onCreate(savedInstanceState: Bundle?)
   {
     super.onCreate(savedInstanceState)
+    WindowCompat.setDecorFitsSystemWindows(window, false)
     setContentView(
       ComposeView(this).apply {
         setContent {
@@ -116,13 +118,12 @@ class DashboardActivity : AppCompatActivity()
     mRadioServiceBound = false
   }
 
-  override fun onSupportNavigateUp(): Boolean
+  override fun onWindowFocusChanged(hasFocus: Boolean)
   {
-    return super.onSupportNavigateUp()
+    super.onWindowFocusChanged(hasFocus)
+    WindowCompat.getInsetsController(window, window.decorView).let { controller ->
+      controller.hide(WindowInsetsCompat.Type.systemBars())
+      controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
   }
-
-  private fun getNavController() =
-    (supportFragmentManager
-      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
-      .navController
 }

@@ -35,9 +35,9 @@ fun StationsScreen(
   Box(
     modifier = Modifier
       .fillMaxSize()
-      .background(Color.White)
+      .background(Color.Transparent)
       .padding(dimensionResource(id = R.dimen.spacing_large)),
-    contentAlignment = Alignment.Center
+    contentAlignment = Alignment.Center,
   ) {
     if (newStationVisibilityState.value) {
       AddNewStationScreen(viewModel)

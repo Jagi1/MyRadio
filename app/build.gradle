@@ -52,6 +52,7 @@ dependencies {
     implementation koinDependencies.values()
     implementation exoplayerDependencies.values()
     implementation gsonDependencies.values()
+    implementation accompanistDependencies.values()
     debugImplementation composeDebugDependencies.values()
     androidTestImplementation composeTestDependencies.values()
 

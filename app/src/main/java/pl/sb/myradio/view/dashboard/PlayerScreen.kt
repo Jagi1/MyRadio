@@ -23,7 +23,7 @@ fun PlayerScreen(
   Box(
     modifier = Modifier
       .fillMaxSize()
-      .background(Color.White),
+      .background(Color.Transparent),
     contentAlignment = Alignment.Center
   ) {
     Station(viewModel)

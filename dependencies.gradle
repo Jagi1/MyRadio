@@ -30,4 +30,7 @@ ext {
     gsonDependencies = [
             gson: "com.google.code.gson:gson:$gson_version"
     ]
+    accompanistDependencies = [
+            systemUiController: "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    ]
 }

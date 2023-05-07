@@ -2,19 +2,18 @@ package pl.sb.myradio.viewModel.dashboard
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pl.sb.myradio.base.Consumable
+import pl.sb.myradio.model.IsSoundMuted
 import pl.sb.myradio.model.Station
+import pl.sb.myradio.model.Volume
 import pl.sb.myradio.util.getJsonDataFromAsset
-import java.io.FileReader
 
 class DashboardViewModel(
   application: Application,
@@ -29,6 +28,10 @@ class DashboardViewModel(
   val playerState = _playerState.asStateFlow()
   private val _newStationVisibilityState = MutableStateFlow(false)
   val newStationVisibilityState = _newStationVisibilityState.asStateFlow()
+  private val _isSoundMuted = MutableStateFlow(IsSoundMuted(muted = false, isConsumed = true))
+  val isSoundMuted = _isSoundMuted.asStateFlow()
+  private val _soundVolume = MutableStateFlow<Volume?>(null)
+  val soundVolume = _soundVolume.asStateFlow()
 
   init
   {
@@ -44,6 +47,10 @@ class DashboardViewModel(
         gson.fromJson(jsonFileString, listStationType)
       }
     }
+  }
+
+  fun initializeCurrentVolume(newVolume: Volume) {
+    _soundVolume.update { newVolume }
   }
 
   fun resolveUiEvent(event: UiEvents) {
@@ -71,6 +78,12 @@ class DashboardViewModel(
       is UiEvents.AddNewStationBackPressed -> {
         _newStationVisibilityState.update { false }
       }
+      is UiEvents.MuteSoundButtonClicked -> {
+        _isSoundMuted.update { it.copy(muted = it.muted.not(), isConsumed = false) }
+      }
+      is UiEvents.VolumeSliderSwiped -> {
+        _soundVolume.update { it?.copy(currentPercent = event.newVolume, isConsumed = false) }
+      }
     }
   }
 
@@ -91,6 +104,16 @@ class DashboardViewModel(
     }
   }
 
+  fun consumeIsSoundMuted()
+  {
+    _isSoundMuted.update { it.copy(isConsumed = true) }
+  }
+
+  fun consumeSoundVolume()
+  {
+    _soundVolume.update { it?.copy(isConsumed = true) }
+  }
+
   sealed interface UiEvents {
 
     data class StationClicked(val station: Station) : UiEvents
@@ -99,6 +122,8 @@ class DashboardViewModel(
     object StopButtonClicked : UiEvents
     object AddNewStationClicked : UiEvents
     object AddNewStationBackPressed : UiEvents
+    object MuteSoundButtonClicked : UiEvents
+    data class VolumeSliderSwiped(val newVolume: Float) : UiEvents
   }
 
   sealed class PlayerState : Consumable {

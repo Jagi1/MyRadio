@@ -28,27 +28,28 @@ fun BlurryCard(
 {
   Card(
     modifier = modifier,
-    backgroundColor = Color(0xFFFFFF),
+    backgroundColor = Color(0x15FFFFFF),
     border = BorderStroke(1.dp, color = Color(0x25FFFFFF)),
     elevation = 0.dp,
     shape = shape
   ) {
-    Box(
-      modifier = Modifier
-        .alpha(1f)
-        .blur(
-          radius = 28.dp,
-          edgeTreatment = BlurredEdgeTreatment.Unbounded
-        )
-        .background(
-          Brush.radialGradient(
-            colors = listOf(Grey1, Grey2, Grey3),
-            radius = 2200f,
-            center = Offset.Infinite
-          )
-        )
-    ) {
+    Box {
       content(this)
+      Box(
+        modifier = Modifier
+          .alpha(1f)
+          .background(
+            Brush.radialGradient(
+              colors = listOf(Grey1, Grey2, Grey3),
+              radius = 2200f,
+              center = Offset.Infinite
+            )
+          )
+          .blur(
+            radius = 28.dp,
+            edgeTreatment = BlurredEdgeTreatment.Unbounded
+          )
+      )
     }
   }
 }
